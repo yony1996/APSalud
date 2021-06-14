@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">APSalud</string>
+    <string name="label_login">Inicio de Sesión</string>
+    <string name="label_register">Registro de Usuarios</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_name">Nombre</string>
+    <string name="label_contraseña">Contraseña</string>
+    <string name="label_button_in">Ingresar</string>
+    <string name="label_button_re">Registrar</string>
+    <string name="label_go_to_registrar">¿Aún no te has registrado?</string>
+    <string name="label_go_to_login">¿Estas registrado? vamos al Inicio</string>
+    <string name="hint_email">Ingrese su email</string>
+    <string name="hint_name">Ingrese su nombre</string>
+    <string name="hint_contraseña">Ingrese su contraseña</string>
+    <string name="fill_your_data">Por favor llena tus datos</string>
+    <string name="saludo">Bienvenido</string>
+    <string name="Make_Appoinment">Reservar una cita</string>
+    <string name="scheduled">Mis citas medicas</string>
+    <string name="Exams">Mis examenes</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="label_createAppointment">Reserva una cita</string>
+    <string name="label_description">Descripción</string>
+    <string name="hint_description">Descripción</string>
+    <string name="label_specialty">Especialidad</string>
+    <string name="hint_specialty">Especialidad</string>
+    <string name="label_type">Tipo de cita</string>
+    <string name="label_type1">Consulta</string>
+    <string name="label_type2">Examen</string>
+    <string name="label_button_next">Siguiente</string>
+    <string name="label_doctor">Doctor</string>
+    <string name="label_scheduled_date">Fecha para la cita</string>
+    <string name="hint_scheduled">Seleccione una fecha</string>
+    <string name="label_confirmAppointment">Confirmar</string>
+    <string name="toast_message">Citas registrada correctamente</string>
+
+    <string name="date_format">%1$d-%2$s-%3$s</string>
+    <string name="My_appointments">Mis Citas</string>
+    <string name="item_appointment_id">Cita Médica # %1$d</string>
+    <string name="item_appointment_doctor">appointment.doctorName</string>
+    <string name="item_appointment_date">Aténción el día %1$s</string>
+    <string name="item_appointment_time">A las %1$s</string>
+
+</resources>
