@@ -46,5 +46,9 @@
     <string name="dialog_button_yes">Si,salir</string>
     <string name="dialog_button_continue">Continuar</string>
     <string name="validate_descrption_appointment">La descripcion es demasiado corta</string>
+    <string name="label_scheduled_time">Hora para la cita</string>
+    <string name="data_confirm">Confirmar datos de la cita</string>
+    <string name="validate_date">"Es necesario seleccionar una fecha "</string>
+    <string name="validate_time">Es necesario seleccionar una hora para la cita</string>
 
 </resources>

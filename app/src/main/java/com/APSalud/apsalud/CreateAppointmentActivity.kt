@@ -9,15 +9,18 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class CreateAppointmentActivity : AppCompatActivity() {
 
 
     private val selectedCalendar=Calendar.getInstance()
-    private var selectedRadioButton:RadioButton?=null
+    private var selectedTimeRadioButton:RadioButton?=null
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_appointment)
@@ -32,16 +35,55 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
         }
 
+        findViewById<Button>(R.id.btnNext2).setOnClickListener {
+
+            when {
+                findViewById<EditText>(R.id.EtxtScheduledDate).text.toString().isEmpty() -> {
+                    findViewById<EditText>(R.id.EtxtScheduledDate).error=getString(R.string.validate_date)
+                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_date),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.red)).show()
+                }
+                selectedTimeRadioButton==null -> {
+                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_time),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.red)).show()
+                }
+                else -> {
+                    showAppointmentDataConfirm()
+                    findViewById<CardView>(R.id.step2).visibility= View.GONE
+                    findViewById<CardView>(R.id.step3).visibility= View.VISIBLE
+                }
+            }
+
+
+
+
+        }
+
         findViewById<Button>(R.id.ConfirmAppoimeintment).setOnClickListener {
             Toast.makeText(this,getString(R.string.toast_message),Toast.LENGTH_SHORT).show()
             finish()
         }
+
         val specialties= arrayListOf("specialty A","specialty B","specialty C")
         findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,specialties)
 
         val doctors= arrayListOf("doctor A","doctor B","doctor C")
         findViewById<Spinner>(R.id.doctorSpiner).adapter=ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,doctors)
 
+
+
+    }
+    private fun showAppointmentDataConfirm(){
+        findViewById<TextView>(R.id.tvConfirm_description).text= findViewById<EditText>(R.id.EtxtDescription).text.toString()
+        findViewById<TextView>(R.id.tvConfirm_type).text=findViewById<Spinner>(R.id.specialtySpiner).selectedItem.toString()
+
+        val radiogroup =findViewById<RadioGroup>(R.id.radioType).checkedRadioButtonId
+        val selectedType=findViewById<RadioGroup>(R.id.radioType).findViewById<RadioButton>(radiogroup)
+
+        findViewById<TextView>(R.id.tvConfirm_specialty).text=selectedType.text.toString()
+        findViewById<TextView>(R.id.tvConfirm_doctor).text=findViewById<Spinner>(R.id.doctorSpiner).selectedItem.toString()
+        findViewById<TextView>(R.id.tvConfirm_scheduled_date).text=findViewById<EditText>(R.id.EtxtScheduledDate).text.toString()
+
+
+        findViewById<TextView>(R.id.tvConfirm_scheduled_time).text=selectedTimeRadioButton?.text.toString()
 
 
     }
@@ -66,6 +108,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                     d.twoDigits()
                 )
             )
+            findViewById<EditText>(R.id.EtxtScheduledDate).error=null
             displayRadioButtons()
         }
 
@@ -90,7 +133,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun  displayRadioButtons(){
 
-        selectedRadioButton=null
+        selectedTimeRadioButton=null
         findViewById<LinearLayout>(R.id.radioGroupLeft).removeAllViews()
         findViewById<LinearLayout>(R.id.radioGroupRight).removeAllViews()
 
@@ -105,10 +148,10 @@ class CreateAppointmentActivity : AppCompatActivity() {
             radioButton.text=it
 
             radioButton.setOnClickListener { view ->
-                selectedRadioButton?.isChecked=false
+                selectedTimeRadioButton?.isChecked=false
 
-                selectedRadioButton= view as RadioButton?
-                selectedRadioButton?.isChecked=true
+                selectedTimeRadioButton= view as RadioButton?
+                selectedTimeRadioButton?.isChecked=true
             }
 
             if (goToLeft)
@@ -125,22 +168,32 @@ class CreateAppointmentActivity : AppCompatActivity() {
     private fun Int.twoDigits()=if(this>=10) this.toString() else "0$this"
 
     override fun onBackPressed() {
-        if(findViewById<CardView>(R.id.step2).visibility==View.VISIBLE){
-            findViewById<CardView>(R.id.step2).visibility=View.GONE
-            findViewById<CardView>(R.id.step1).visibility=View.VISIBLE
+        when {
+            findViewById<CardView>(R.id.step3).visibility==View.VISIBLE -> {
+                findViewById<CardView>(R.id.step3).visibility=View.GONE
+                findViewById<CardView>(R.id.step2).visibility=View.VISIBLE
 
-        }else if(findViewById<CardView>(R.id.step1).visibility==View.VISIBLE){
-            val builder=  AlertDialog.Builder(this)
-            builder.setTitle(getString( R.string.dialog_title))
-            builder.setMessage(getString(R.string.dialog_message))
-            builder.setPositiveButton(getString(R.string.dialog_button_yes)){ _,_->
-                finish()
             }
-            builder.setNegativeButton(getString(R.string.dialog_button_continue)){dialog,_->
-                dialog.dismiss()
+
+            findViewById<CardView>(R.id.step2).visibility==View.VISIBLE -> {
+                findViewById<CardView>(R.id.step2).visibility=View.GONE
+                findViewById<CardView>(R.id.step1).visibility=View.VISIBLE
+
             }
-            val dialog=builder.create()
-            dialog.show()
+
+            findViewById<CardView>(R.id.step1).visibility==View.VISIBLE -> {
+                val builder=  AlertDialog.Builder(this)
+                builder.setTitle(getString( R.string.dialog_title))
+                builder.setMessage(getString(R.string.dialog_message))
+                builder.setPositiveButton(getString(R.string.dialog_button_yes)){ _,_->
+                    finish()
+                }
+                builder.setNegativeButton(getString(R.string.dialog_button_continue)){dialog,_->
+                    dialog.dismiss()
+                }
+                val dialog=builder.create()
+                dialog.show()
+            }
         }
 
 

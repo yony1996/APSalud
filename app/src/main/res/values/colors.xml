@@ -11,5 +11,6 @@
     <color name="pink_2">#ff0080</color>
     <color name="pink_3">#fbebe1</color>
     <color name="morado">#990099</color>
+    <color name="red">#FF0000</color>
     <color name="transparent">#9CFFFFFF</color>
 </resources>
