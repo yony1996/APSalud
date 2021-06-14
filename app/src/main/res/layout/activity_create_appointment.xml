@@ -33,7 +33,6 @@
             android:layout_marginTop="90dp"
             android:layout_marginRight="8dp"
             android:backgroundTint="@color/white"
-
             app:cardCornerRadius="20dp"
             app:cardElevation="50dp"
             tools:targetApi="lollipop">
@@ -53,6 +52,7 @@
                     android:textColor="@color/black" />
 
                 <EditText
+                    android:id="@+id/EtxtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -91,6 +91,7 @@
                     android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:checked="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"

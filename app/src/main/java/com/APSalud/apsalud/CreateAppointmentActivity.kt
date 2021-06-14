@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import java.util.*
 
@@ -22,8 +23,13 @@ class CreateAppointmentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_appointment)
 
         findViewById<Button>(R.id.btnNext).setOnClickListener {
-            findViewById<CardView>(R.id.step1).visibility= View.GONE
-            findViewById<CardView>(R.id.step2).visibility= View.VISIBLE
+            if(findViewById<EditText>(R.id.EtxtDescription).text.toString().length<3){
+                findViewById<EditText>(R.id.EtxtDescription).error=getString(R.string.validate_descrption_appointment)
+            }else{
+                findViewById<CardView>(R.id.step1).visibility= View.GONE
+                findViewById<CardView>(R.id.step2).visibility= View.VISIBLE
+            }
+
         }
 
         findViewById<Button>(R.id.ConfirmAppoimeintment).setOnClickListener {
@@ -117,5 +123,27 @@ class CreateAppointmentActivity : AppCompatActivity() {
     }
 
     private fun Int.twoDigits()=if(this>=10) this.toString() else "0$this"
+
+    override fun onBackPressed() {
+        if(findViewById<CardView>(R.id.step2).visibility==View.VISIBLE){
+            findViewById<CardView>(R.id.step2).visibility=View.GONE
+            findViewById<CardView>(R.id.step1).visibility=View.VISIBLE
+
+        }else if(findViewById<CardView>(R.id.step1).visibility==View.VISIBLE){
+            val builder=  AlertDialog.Builder(this)
+            builder.setTitle(getString( R.string.dialog_title))
+            builder.setMessage(getString(R.string.dialog_message))
+            builder.setPositiveButton(getString(R.string.dialog_button_yes)){ _,_->
+                finish()
+            }
+            builder.setNegativeButton(getString(R.string.dialog_button_continue)){dialog,_->
+                dialog.dismiss()
+            }
+            val dialog=builder.create()
+            dialog.show()
+        }
+
+
+    }
 
 }
