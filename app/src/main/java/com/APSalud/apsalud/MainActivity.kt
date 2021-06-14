@@ -6,19 +6,22 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import  com.APSalud.apsalud.PreferenceHelper.get
 import  com.APSalud.apsalud.PreferenceHelper.set
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
+    private val mainLayout=findViewById<ConstraintLayout>(R.id.mainLayout)
+    private val snackBar by lazy {
+        Snackbar.make(mainLayout,R.string.press_back_again,Snackbar.LENGTH_SHORT)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*
-        val preferences=getSharedPreferences("general", MODE_PRIVATE)
-        val session=preferences.getBoolean("session",false)
-        */
+
         val preferences= PreferenceHelper.defaultPrefs(this)
         if (preferences["session",false]) {
             goToMenuActivity()
@@ -52,6 +55,14 @@ class MainActivity : AppCompatActivity() {
         */
         val preferences=PreferenceHelper.defaultPrefs(this)
         preferences["session"]=true
+
+    }
+
+    override fun onBackPressed() {
+        if(snackBar.isShown)
+            super.onBackPressed()
+        else
+            snackBar.show()
 
     }
 

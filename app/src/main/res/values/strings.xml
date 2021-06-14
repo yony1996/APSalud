@@ -39,5 +39,6 @@
     <string name="item_appointment_doctor">appointment.doctorName</string>
     <string name="item_appointment_date">Aténción el día %1$s</string>
     <string name="item_appointment_time">A las %1$s</string>
+    <string name="press_back_again">Presione nuevamente para salir</string>
 
 </resources>
