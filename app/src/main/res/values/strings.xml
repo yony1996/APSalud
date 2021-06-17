@@ -50,5 +50,6 @@
     <string name="data_confirm">Confirmar datos de la cita</string>
     <string name="validate_date">"Es necesario seleccionar una fecha "</string>
     <string name="validate_time">Es necesario seleccionar una hora para la cita</string>
+    <string name="Alert_specialty">Ha ocurrido un problema al cargar las especialidades</string>
 
 </resources>

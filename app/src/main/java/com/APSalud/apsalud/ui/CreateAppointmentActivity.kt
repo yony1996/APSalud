@@ -1,4 +1,4 @@
-package com.APSalud.apsalud
+package com.APSalud.apsalud.ui
 
 import android.app.DatePickerDialog
 import android.os.Build
@@ -10,12 +10,21 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.APSalud.apsalud.R
+import com.APSalud.apsalud.io.ApiService
+import com.APSalud.apsalud.model.Specialty
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateAppointmentActivity : AppCompatActivity() {
 
-
+    private val apiService: ApiService by lazy{
+        ApiService.create()
+    }
     private val selectedCalendar=Calendar.getInstance()
     private var selectedTimeRadioButton:RadioButton?=null
 
@@ -40,10 +49,14 @@ class CreateAppointmentActivity : AppCompatActivity() {
             when {
                 findViewById<EditText>(R.id.EtxtScheduledDate).text.toString().isEmpty() -> {
                     findViewById<EditText>(R.id.EtxtScheduledDate).error=getString(R.string.validate_date)
-                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_date),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.red)).show()
+                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_date),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
+                        R.color.red
+                    )).show()
                 }
                 selectedTimeRadioButton==null -> {
-                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_time),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.red)).show()
+                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_time),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
+                        R.color.red
+                    )).show()
                 }
                 else -> {
                     showAppointmentDataConfirm()
@@ -62,13 +75,34 @@ class CreateAppointmentActivity : AppCompatActivity() {
             finish()
         }
 
-        val specialties= arrayListOf("specialty A","specialty B","specialty C")
-        findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,specialties)
-
+        loadSpecialties()
         val doctors= arrayListOf("doctor A","doctor B","doctor C")
         findViewById<Spinner>(R.id.doctorSpiner).adapter=ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,doctors)
 
 
+
+    }
+    private fun loadSpecialties(){
+        val call=apiService.getSpecialties()
+        call.enqueue(object : Callback<ArrayList<Specialty>> {
+            override fun onResponse(call: Call<ArrayList<Specialty>>, response: Response<ArrayList<Specialty>>) {
+                 if (response.isSuccessful){ //200...300
+                     val specialties=response.body()
+                     val specialtiesOptions= ArrayList<String>()
+                     specialties?.forEach(){
+                         specialtiesOptions.add(it.name)
+                     }
+                     findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<String>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialtiesOptions)
+
+                 }
+            }
+
+            override fun onFailure(call: Call<ArrayList<Specialty>>, t: Throwable) {
+                Toast.makeText(this@CreateAppointmentActivity,getString(R.string.Alert_specialty),Toast.LENGTH_LONG).show()
+                finish()
+            }
+
+        })
 
     }
     private fun showAppointmentDataConfirm(){
@@ -183,12 +217,12 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
             findViewById<CardView>(R.id.step1).visibility==View.VISIBLE -> {
                 val builder=  AlertDialog.Builder(this)
-                builder.setTitle(getString( R.string.dialog_title))
+                builder.setTitle(getString(R.string.dialog_title))
                 builder.setMessage(getString(R.string.dialog_message))
-                builder.setPositiveButton(getString(R.string.dialog_button_yes)){ _,_->
+                builder.setPositiveButton(getString(R.string.dialog_button_yes)){ _, _->
                     finish()
                 }
-                builder.setNegativeButton(getString(R.string.dialog_button_continue)){dialog,_->
+                builder.setNegativeButton(getString(R.string.dialog_button_continue)){ dialog, _->
                     dialog.dismiss()
                 }
                 val dialog=builder.create()
@@ -198,5 +232,6 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
 
     }
+
 
 }

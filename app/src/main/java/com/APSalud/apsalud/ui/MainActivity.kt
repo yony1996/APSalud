@@ -1,4 +1,4 @@
-package com.APSalud.apsalud
+package com.APSalud.apsalud.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
+import com.APSalud.apsalud.PreferenceHelper
 import  com.APSalud.apsalud.PreferenceHelper.get
 import  com.APSalud.apsalud.PreferenceHelper.set
+import com.APSalud.apsalud.R
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("session", true)
         editor.apply()
         */
-        val preferences=PreferenceHelper.defaultPrefs(this)
+        val preferences= PreferenceHelper.defaultPrefs(this)
         preferences["session"]=true
 
     }

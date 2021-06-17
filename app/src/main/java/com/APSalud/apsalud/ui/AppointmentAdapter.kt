@@ -1,10 +1,11 @@
-package com.APSalud.apsalud
+package com.APSalud.apsalud.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.APSalud.apsalud.R
 import com.APSalud.apsalud.model.Appointment
 import java.util.ArrayList
 

@@ -1,9 +1,10 @@
-package com.APSalud.apsalud
+package com.APSalud.apsalud.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.APSalud.apsalud.R
 import com.APSalud.apsalud.model.Appointment
 
 class AppointmentsActivity : AppCompatActivity() {
@@ -29,6 +30,6 @@ class AppointmentsActivity : AppCompatActivity() {
 
         )
         findViewById<RecyclerView>(R.id.rvAppointment).layoutManager=LinearLayoutManager(this)
-        findViewById<RecyclerView>(R.id.rvAppointment).adapter=AppointmentAdapter(appointments)
+        findViewById<RecyclerView>(R.id.rvAppointment).adapter= AppointmentAdapter(appointments)
     }
 }
