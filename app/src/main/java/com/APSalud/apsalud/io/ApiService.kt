@@ -1,14 +1,19 @@
 package com.APSalud.apsalud.io
 
+import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Specialty
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface ApiService {
     @GET("specialties")
     abstract fun getSpecialties():Call<ArrayList<Specialty>>
+
+    @GET("specialties/{specialty}/doctors")
+    abstract fun getDoctors(@Path("specialty") specialtyId:Int):Call<ArrayList<Doctor>>
 
     companion object Factory{
         private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"

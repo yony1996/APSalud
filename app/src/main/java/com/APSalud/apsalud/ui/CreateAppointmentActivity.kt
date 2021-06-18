@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
+import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Specialty
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -76,8 +77,8 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
 
         loadSpecialties()
-        val doctors= arrayListOf("doctor A","doctor B","doctor C")
-        findViewById<Spinner>(R.id.doctorSpiner).adapter=ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,doctors)
+        listenSpecialtyChanges()
+
 
 
 
@@ -87,12 +88,12 @@ class CreateAppointmentActivity : AppCompatActivity() {
         call.enqueue(object : Callback<ArrayList<Specialty>> {
             override fun onResponse(call: Call<ArrayList<Specialty>>, response: Response<ArrayList<Specialty>>) {
                  if (response.isSuccessful){ //200...300
-                     val specialties=response.body()
-                     val specialtiesOptions= ArrayList<String>()
-                     specialties?.forEach(){
-                         specialtiesOptions.add(it.name)
+                     response.body()?.let {
+                         val specialties=it.toMutableList()
+                         findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<Specialty>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialties)
                      }
-                     findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<String>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialtiesOptions)
+
+
 
                  }
             }
@@ -105,6 +106,42 @@ class CreateAppointmentActivity : AppCompatActivity() {
         })
 
     }
+    private fun listenSpecialtyChanges(){
+        findViewById<Spinner>(R.id.specialtySpiner).onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val specialty= adapter?.getItemAtPosition(position) as Specialty
+                loadDoctors(specialty.id)
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
+    private fun loadDoctors(specialtyId:Int){
+        val call=apiService.getDoctors(specialtyId)
+        call.enqueue(object: Callback<ArrayList<Doctor>>{
+            override fun onResponse(call: Call<ArrayList<Doctor>>,response: Response<ArrayList<Doctor>>) {
+                if (response.isSuccessful){ //200...300
+                    response.body()?.let {
+                        val doctors=it.toMutableList()
+                        findViewById<Spinner>(R.id.doctorSpiner).adapter=ArrayAdapter<Doctor>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,doctors)
+                    }
+
+
+
+                }
+            }
+
+            override fun onFailure(call: Call<ArrayList<Doctor>>, t: Throwable) {
+                Toast.makeText(this@CreateAppointmentActivity,getString(R.string.Alert_doctor),Toast.LENGTH_LONG).show()
+
+            }
+        } )
+    }
+
     private fun showAppointmentDataConfirm(){
         findViewById<TextView>(R.id.tvConfirm_description).text= findViewById<EditText>(R.id.EtxtDescription).text.toString()
         findViewById<TextView>(R.id.tvConfirm_type).text=findViewById<Spinner>(R.id.specialtySpiner).selectedItem.toString()
