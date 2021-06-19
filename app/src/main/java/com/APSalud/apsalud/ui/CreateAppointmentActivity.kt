@@ -118,12 +118,29 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     }
     private fun loadHours(doctorId:Int,date:String){
+        if( date.isEmpty()){
+            return
+        }
         val call=apiService.getHours(doctorId,date)
         call.enqueue(object :Callback<Schedule>{
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
                 if(response.isSuccessful){
                     val schedule=response.body()
-                    Toast.makeText(this@CreateAppointmentActivity,"morning:${schedule?.morning?.size} ,afternoon: ${schedule?.afternoon?.size}",Toast.LENGTH_LONG).show()
+                    // val hours= arrayOf("3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM")
+                    schedule?.let {
+                        findViewById<TextView>(R.id.AlertInfo).visibility=View.GONE
+                        val intervals=it.morning+it.afternoon
+                        val hours=ArrayList<String>()
+                        intervals.forEach { interval->
+                            hours.add(interval.start)
+                        }
+
+                        displayIntervalRadio(hours)
+                    }
+
+
+                    //Toast.makeText(this@CreateAppointmentActivity,"morning:${schedule?.morning?.size} ,afternoon: ${schedule?.afternoon?.size}",Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -224,12 +241,12 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 resources.getString(
                     R.string.date_format,
                     y,
-                    m.twoDigits(),
+                    (m+1).twoDigits(),
                     d.twoDigits()
                 )
             )
             findViewById<EditText>(R.id.EtxtScheduledDate).error=null
-            displayRadioButtons()
+
         }
 
 
@@ -248,16 +265,19 @@ class CreateAppointmentActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private fun  displayRadioButtons(){
+    private fun  displayIntervalRadio( hours:ArrayList<String>){
 
         selectedTimeRadioButton=null
         findViewById<LinearLayout>(R.id.radioGroupLeft).removeAllViews()
         findViewById<LinearLayout>(R.id.radioGroupRight).removeAllViews()
 
-        val hours= arrayOf("3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM")
+        if(hours.isEmpty()){
+            findViewById<TextView>(R.id.AlertDanger).visibility=View.VISIBLE
+
+            return
+        }
+        findViewById<TextView>(R.id.AlertDanger).visibility=View.GONE
 
         var goToLeft=true
 

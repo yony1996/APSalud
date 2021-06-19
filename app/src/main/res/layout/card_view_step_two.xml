@@ -13,6 +13,7 @@
     android:layout_marginRight="8dp"
     android:backgroundTint="@color/white"
     android:visibility="gone"
+    tools:visibility="visible"
     app:cardCornerRadius="20dp"
     app:cardElevation="50dp"
     tools:targetApi="lollipop">
@@ -66,6 +67,27 @@
                 android:inputType="date"
                 android:maxLines="1"
                 android:onClick="onClickScheduleDate" />
+            <TextView
+                android:id="@+id/AlertInfo"
+                android:layout_marginTop="8dp"
+                android:text="@string/Alert_info"
+                android:gravity="center_horizontal"
+                android:background="@color/morado"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/AlertDanger"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:text="@string/Alert_danger"
+                android:gravity="center_horizontal"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,12 +102,14 @@
                     android:orientation="vertical">
 
                     <RadioButton
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="8:00 AM" />
 
                     <RadioButton
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -102,12 +126,14 @@
                     android:orientation="vertical">
 
                     <RadioButton
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="8:00 AM" />
 
                     <RadioButton
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"

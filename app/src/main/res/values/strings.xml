@@ -53,5 +53,7 @@
     <string name="Alert_specialty">Ha ocurrido un problema al cargar las especialidades</string>
     <string name="Alert_doctor">Ha ocurrido un problema al cargar los medicos</string>
     <string name="Fail_hours">No se han podido cargar las horas</string>
+    <string name="Alert_info">Seleccione un médico y una fecha para ver las horas disponibles</string>
+    <string name="Alert_danger">No se encontraron horas disponibles para el medico en el día seleccionado.</string>
 
 </resources>
