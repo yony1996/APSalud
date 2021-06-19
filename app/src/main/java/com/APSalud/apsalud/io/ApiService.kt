@@ -1,5 +1,6 @@
 package com.APSalud.apsalud.io
 
+import com.APSalud.apsalud.io.response.LoginResponse
 import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
@@ -9,6 +10,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -21,6 +23,9 @@ interface ApiService {
 
     @GET("schedule/hours")
     fun getHours(@Query("doctor_id") doctorId:Int,@Query("date") date:String):Call<Schedule>
+
+    @POST("login")
+    fun postLogin(@Query("email") email:String,@Query("password") password:String):Call<LoginResponse>
 
     companion object Factory{
         private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"
