@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -13,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.model.Doctor
+import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -78,10 +81,56 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
         loadSpecialties()
         listenSpecialtyChanges()
+        listenDoctorAndChanges()
 
 
 
 
+    }
+    private fun listenDoctorAndChanges(){
+        findViewById<Spinner>(R.id.doctorSpiner).onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val doctor= adapter?.getItemAtPosition(position) as Doctor
+                loadHours(doctor.id,findViewById<EditText>(R.id.EtxtScheduledDate).text.toString())
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+        findViewById<EditText>(R.id.EtxtScheduledDate).addTextChangedListener(object:TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               val doctor:Doctor=findViewById<Spinner>(R.id.doctorSpiner).selectedItem as Doctor
+                loadHours(doctor.id,findViewById<EditText>(R.id.EtxtScheduledDate).text.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+
+    }
+    private fun loadHours(doctorId:Int,date:String){
+        val call=apiService.getHours(doctorId,date)
+        call.enqueue(object :Callback<Schedule>{
+            override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
+                if(response.isSuccessful){
+                    val schedule=response.body()
+                    Toast.makeText(this@CreateAppointmentActivity,"morning:${schedule?.morning?.size} ,afternoon: ${schedule?.afternoon?.size}",Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Schedule>, t: Throwable) {
+                Toast.makeText(this@CreateAppointmentActivity,getString(R.string.Fail_hours),Toast.LENGTH_LONG).show()
+            }
+        })
     }
     private fun loadSpecialties(){
         val call=apiService.getSpecialties()
@@ -115,7 +164,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
 
         }

@@ -52,5 +52,6 @@
     <string name="validate_time">Es necesario seleccionar una hora para la cita</string>
     <string name="Alert_specialty">Ha ocurrido un problema al cargar las especialidades</string>
     <string name="Alert_doctor">Ha ocurrido un problema al cargar los medicos</string>
+    <string name="Fail_hours">No se han podido cargar las horas</string>
 
 </resources>
