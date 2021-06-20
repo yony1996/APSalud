@@ -55,5 +55,9 @@
     <string name="Fail_hours">No se han podido cargar las horas</string>
     <string name="Alert_info">Seleccione un médico y una fecha para ver las horas disponibles</string>
     <string name="Alert_danger">No se encontraron horas disponibles para el medico en el día seleccionado.</string>
+    <string name="Alert_login_response">Se obtuvo una respuesta inesperada del servidor</string>
+    <string name="error_credentials">Las credenciales son incorrectas</string>
+    <string name="Alert_empty_text_login">Ingrese un correo y contraseña</string>
+    <string name="welcome_name">Bienvenido %1$s</string>
 
 </resources>

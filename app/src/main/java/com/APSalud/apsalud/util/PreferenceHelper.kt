@@ -1,4 +1,4 @@
-package com.APSalud.apsalud
+package com.APSalud.apsalud.util
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -13,4 +13,6 @@
     <color name="morado">#990099</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#9CFFFFFF</color>
+    <color name="orange">#FF9800</color>
+    <color name="green">#4CAF50</color>
 </resources>

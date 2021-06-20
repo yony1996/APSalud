@@ -45,6 +45,7 @@
                 android:textColor="@color/black" />
 
             <EditText
+                android:id="@+id/EtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -63,6 +64,7 @@
                 android:textColor="@color/black" />
 
             <EditText
+                android:id="@+id/EtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

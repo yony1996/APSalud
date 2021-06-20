@@ -1,37 +1,45 @@
 package com.APSalud.apsalud.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.LinearLayout
-import com.APSalud.apsalud.PreferenceHelper
-import  com.APSalud.apsalud.PreferenceHelper.get
-import  com.APSalud.apsalud.PreferenceHelper.set
+import com.APSalud.apsalud.util.PreferenceHelper
+import  com.APSalud.apsalud.util.PreferenceHelper.get
+import  com.APSalud.apsalud.util.PreferenceHelper.set
 import com.APSalud.apsalud.R
+import com.APSalud.apsalud.io.ApiService
+import com.APSalud.apsalud.io.response.LoginResponse
+import com.APSalud.apsalud.util.toast
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
 
+    private val apiService:ApiService by lazy {
+        ApiService.create()
+    }
     private val snackBar by lazy {
         Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.press_back_again),Snackbar.LENGTH_SHORT)
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
         val preferences= PreferenceHelper.defaultPrefs(this)
-        if (preferences["session",false]) {
+        if (preferences["passport",""].contains(".")) {
             goToMenuActivity()
         }
         findViewById<Button>(R.id.BtnIngresar).setOnClickListener {
-
-            createSessionPreference()
-            goToMenuActivity()
+            performLogin()
         }
 
         findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
@@ -41,14 +49,49 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun performLogin(){
 
+        val email=findViewById<EditText>(R.id.EtEmail).text.toString()
+        val password=findViewById<EditText>(R.id.EtPassword).text.toString()
+
+        if (email.trim().isEmpty() || password.trim().isEmpty()){
+            Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.Alert_empty_text_login),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.orange)).show()
+            return
+        }
+       val call= apiService.postLogin(email,password)
+        call.enqueue(object : Callback<LoginResponse>{
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful){
+                    val loginResponse=response.body()
+                    if (loginResponse== null){
+                        toast(getString(R.string.Alert_login_response))
+                        return
+                    }
+                    if (loginResponse.success){
+                        createSessionPreference(loginResponse.passport)
+                        Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.welcome_name,loginResponse.user.name),Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.green)).show()
+                        goToMenuActivity()
+                    }else{
+                        toast(getString(R.string.error_credentials))
+                    }
+                }else{
+                    toast(getString(R.string.Alert_login_response))
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+              toast(t.localizedMessage)
+            }
+        })
+    }
     private fun goToMenuActivity() {
         val intent = Intent(this@MainActivity, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun createSessionPreference() {
+    private fun createSessionPreference(passport:String) {
         /*
         val preferences = getSharedPreferences("general", MODE_PRIVATE)
         val editor = preferences.edit()
@@ -56,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
         */
         val preferences= PreferenceHelper.defaultPrefs(this)
-        preferences["session"]=true
+        preferences["passport"]=passport
 
     }
 
