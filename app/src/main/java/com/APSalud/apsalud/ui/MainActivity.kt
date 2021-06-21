@@ -3,6 +3,7 @@ package com.APSalud.apsalud.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         ApiService.create()
     }
     private val snackBar by lazy {
-        Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.press_back_again),Snackbar.LENGTH_SHORT)
+        Snackbar.make(mainLayout,getString(R.string.press_back_again),Snackbar.LENGTH_SHORT)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -38,11 +39,11 @@ class MainActivity : AppCompatActivity() {
         if (preferences["passport",""].contains(".")) {
             goToMenuActivity()
         }
-        findViewById<Button>(R.id.BtnIngresar).setOnClickListener {
+        BtnIngresar.setOnClickListener {
             performLogin()
         }
 
-        findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
+        gotoRegister.setOnClickListener {
             Toast.makeText(this, getString(R.string.fill_your_data), Toast.LENGTH_LONG).show()
 
             val intent = Intent(this, RegisterActivity::class.java)
@@ -52,11 +53,11 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun performLogin(){
 
-        val email=findViewById<EditText>(R.id.EtEmail).text.toString()
-        val password=findViewById<EditText>(R.id.EtPassword).text.toString()
+        val email=EtEmail.text.toString()
+        val password=EtPassword.text.toString()
 
         if (email.trim().isEmpty() || password.trim().isEmpty()){
-            Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.Alert_empty_text_login),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.orange)).show()
+            Snackbar.make(mainLayout,getString(R.string.Alert_empty_text_login),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.orange)).show()
             return
         }
        val call= apiService.postLogin(email,password)
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     if (loginResponse.success){
                         createSessionPreference(loginResponse.passport)
-                        Snackbar.make(findViewById<LinearLayout>(R.id.mainLayout),getString(R.string.welcome_name,loginResponse.user.name),Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.green)).show()
+                        Snackbar.make(mainLayout,getString(R.string.welcome_name,loginResponse.user.name),Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.green)).show()
                         goToMenuActivity()
                     }else{
                         toast(getString(R.string.error_credentials))
@@ -92,12 +93,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createSessionPreference(passport:String) {
-        /*
-        val preferences = getSharedPreferences("general", MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putBoolean("session", true)
-        editor.apply()
-        */
+
         val preferences= PreferenceHelper.defaultPrefs(this)
         preferences["passport"]=passport
 

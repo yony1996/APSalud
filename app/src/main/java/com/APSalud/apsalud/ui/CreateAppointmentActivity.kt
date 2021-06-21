@@ -4,20 +4,23 @@ import android.app.DatePickerDialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_create_appointment.*
+import kotlinx.android.synthetic.main.card_view_step_one.*
+import kotlinx.android.synthetic.main.card_view_step_three.*
+import kotlinx.android.synthetic.main.card_view_step_two.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,34 +41,34 @@ class CreateAppointmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_appointment)
 
-        findViewById<Button>(R.id.btnNext).setOnClickListener {
-            if(findViewById<EditText>(R.id.EtxtDescription).text.toString().length<3){
-                findViewById<EditText>(R.id.EtxtDescription).error=getString(R.string.validate_descrption_appointment)
+        btnNext.setOnClickListener {
+            if(EtxtDescription.text.toString().length<3){
+                EtxtDescription.error=getString(R.string.validate_descrption_appointment)
             }else{
-                findViewById<CardView>(R.id.step1).visibility= View.GONE
-                findViewById<CardView>(R.id.step2).visibility= View.VISIBLE
+                step1.visibility= View.GONE
+                step2.visibility= View.VISIBLE
             }
 
         }
 
-        findViewById<Button>(R.id.btnNext2).setOnClickListener {
+        btnNext2.setOnClickListener {
 
             when {
-                findViewById<EditText>(R.id.EtxtScheduledDate).text.toString().isEmpty() -> {
-                    findViewById<EditText>(R.id.EtxtScheduledDate).error=getString(R.string.validate_date)
-                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_date),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
+                EtxtScheduledDate.text.toString().isEmpty() -> {
+                    EtxtScheduledDate.error=getString(R.string.validate_date)
+                    Snackbar.make(createAppointment,getString(R.string.validate_date),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
                         R.color.red
                     )).show()
                 }
                 selectedTimeRadioButton==null -> {
-                    Snackbar.make(findViewById<ConstraintLayout>(R.id.createAppointment),getString(R.string.validate_time),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
+                    Snackbar.make(createAppointment,getString(R.string.validate_time),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(
                         R.color.red
                     )).show()
                 }
                 else -> {
                     showAppointmentDataConfirm()
-                    findViewById<CardView>(R.id.step2).visibility= View.GONE
-                    findViewById<CardView>(R.id.step3).visibility= View.VISIBLE
+                    step2.visibility= View.GONE
+                    step3.visibility= View.VISIBLE
                 }
             }
 
@@ -74,7 +77,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
         }
 
-        findViewById<Button>(R.id.ConfirmAppoimeintment).setOnClickListener {
+        ConfirmAppoimeintment.setOnClickListener {
             Toast.makeText(this,getString(R.string.toast_message),Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -88,10 +91,10 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     }
     private fun listenDoctorAndChanges(){
-        findViewById<Spinner>(R.id.doctorSpiner).onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
+        doctorSpiner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val doctor= adapter?.getItemAtPosition(position) as Doctor
-                loadHours(doctor.id,findViewById<EditText>(R.id.EtxtScheduledDate).text.toString())
+                loadHours(doctor.id,EtxtScheduledDate.text.toString())
 
             }
 
@@ -100,14 +103,14 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
         }
-        findViewById<EditText>(R.id.EtxtScheduledDate).addTextChangedListener(object:TextWatcher{
+        EtxtScheduledDate.addTextChangedListener(object:TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-               val doctor:Doctor=findViewById<Spinner>(R.id.doctorSpiner).selectedItem as Doctor
-                loadHours(doctor.id,findViewById<EditText>(R.id.EtxtScheduledDate).text.toString())
+               val doctor:Doctor=doctorSpiner.selectedItem as Doctor
+                loadHours(doctor.id,EtxtScheduledDate.text.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -129,7 +132,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                     val schedule=response.body()
                     // val hours= arrayOf("3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM")
                     schedule?.let {
-                        findViewById<TextView>(R.id.AlertInfo).visibility=View.GONE
+                        AlertInfo.visibility=View.GONE
                         val intervals=it.morning+it.afternoon
                         val hours=ArrayList<String>()
                         intervals.forEach { interval->
@@ -156,7 +159,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                  if (response.isSuccessful){ //200...300
                      response.body()?.let {
                          val specialties=it.toMutableList()
-                         findViewById<Spinner>(R.id.specialtySpiner).adapter=ArrayAdapter<Specialty>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialties)
+                         specialtySpiner.adapter=ArrayAdapter<Specialty>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,specialties)
                      }
 
 
@@ -173,7 +176,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     }
     private fun listenSpecialtyChanges(){
-        findViewById<Spinner>(R.id.specialtySpiner).onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
+        specialtySpiner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val specialty= adapter?.getItemAtPosition(position) as Specialty
                 loadDoctors(specialty.id)
@@ -193,7 +196,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 if (response.isSuccessful){ //200...300
                     response.body()?.let {
                         val doctors=it.toMutableList()
-                        findViewById<Spinner>(R.id.doctorSpiner).adapter=ArrayAdapter<Doctor>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,doctors)
+                        doctorSpiner.adapter=ArrayAdapter<Doctor>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,doctors)
                     }
 
 
@@ -209,18 +212,18 @@ class CreateAppointmentActivity : AppCompatActivity() {
     }
 
     private fun showAppointmentDataConfirm(){
-        findViewById<TextView>(R.id.tvConfirm_description).text= findViewById<EditText>(R.id.EtxtDescription).text.toString()
-        findViewById<TextView>(R.id.tvConfirm_type).text=findViewById<Spinner>(R.id.specialtySpiner).selectedItem.toString()
+        tvConfirm_description.text= EtxtDescription.text.toString()
+        tvConfirm_type.text=specialtySpiner.selectedItem.toString()
 
-        val radiogroup =findViewById<RadioGroup>(R.id.radioType).checkedRadioButtonId
-        val selectedType=findViewById<RadioGroup>(R.id.radioType).findViewById<RadioButton>(radiogroup)
+        val radiogroup =radioType.checkedRadioButtonId
+        val selectedType=radioType.findViewById<RadioButton>(radiogroup)
 
-        findViewById<TextView>(R.id.tvConfirm_specialty).text=selectedType.text.toString()
-        findViewById<TextView>(R.id.tvConfirm_doctor).text=findViewById<Spinner>(R.id.doctorSpiner).selectedItem.toString()
-        findViewById<TextView>(R.id.tvConfirm_scheduled_date).text=findViewById<EditText>(R.id.EtxtScheduledDate).text.toString()
+        tvConfirm_specialty.text=selectedType.text.toString()
+        tvConfirm_doctor.text=doctorSpiner.selectedItem.toString()
+        tvConfirm_scheduled_date.text=EtxtScheduledDate.text.toString()
 
 
-        findViewById<TextView>(R.id.tvConfirm_scheduled_time).text=selectedTimeRadioButton?.text.toString()
+        tvConfirm_scheduled_time.text=selectedTimeRadioButton?.text.toString()
 
 
     }
@@ -237,7 +240,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
         val listener=DatePickerDialog.OnDateSetListener { datePicker, y, m, d ->
             //Toast.makeText(this,"$y-$m-$d",Toast.LENGTH_SHORT).show()
             selectedCalendar.set(y,m,d)
-            findViewById<EditText>(R.id.EtxtScheduledDate).setText(
+            EtxtScheduledDate.setText(
                 resources.getString(
                     R.string.date_format,
                     y,
@@ -245,7 +248,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                     d.twoDigits()
                 )
             )
-            findViewById<EditText>(R.id.EtxtScheduledDate).error=null
+            EtxtScheduledDate.error=null
 
         }
 
@@ -269,15 +272,15 @@ class CreateAppointmentActivity : AppCompatActivity() {
     private fun  displayIntervalRadio( hours:ArrayList<String>){
 
         selectedTimeRadioButton=null
-        findViewById<LinearLayout>(R.id.radioGroupLeft).removeAllViews()
-        findViewById<LinearLayout>(R.id.radioGroupRight).removeAllViews()
+        radioGroupLeft.removeAllViews()
+        radioGroupRight.removeAllViews()
 
         if(hours.isEmpty()){
-            findViewById<TextView>(R.id.AlertDanger).visibility=View.VISIBLE
+            AlertDanger.visibility=View.VISIBLE
 
             return
         }
-        findViewById<TextView>(R.id.AlertDanger).visibility=View.GONE
+        AlertDanger.visibility=View.GONE
 
         var goToLeft=true
 
@@ -295,9 +298,9 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
             if (goToLeft)
-                findViewById<LinearLayout>(R.id.radioGroupLeft).addView(radioButton)
+                radioGroupLeft.addView(radioButton)
             else
-                findViewById<LinearLayout>(R.id.radioGroupRight).addView(radioButton)
+                radioGroupRight.addView(radioButton)
             goToLeft= !goToLeft
 
         }
@@ -309,19 +312,19 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         when {
-            findViewById<CardView>(R.id.step3).visibility==View.VISIBLE -> {
-                findViewById<CardView>(R.id.step3).visibility=View.GONE
-                findViewById<CardView>(R.id.step2).visibility=View.VISIBLE
+            step3.visibility==View.VISIBLE -> {
+                step3.visibility=View.GONE
+                step2.visibility=View.VISIBLE
 
             }
 
-            findViewById<CardView>(R.id.step2).visibility==View.VISIBLE -> {
-                findViewById<CardView>(R.id.step2).visibility=View.GONE
-                findViewById<CardView>(R.id.step1).visibility=View.VISIBLE
+            step2.visibility==View.VISIBLE -> {
+                step2.visibility=View.GONE
+                step1.visibility=View.VISIBLE
 
             }
 
-            findViewById<CardView>(R.id.step1).visibility==View.VISIBLE -> {
+            step1.visibility==View.VISIBLE -> {
                 val builder=  AlertDialog.Builder(this)
                 builder.setTitle(getString(R.string.dialog_title))
                 builder.setMessage(getString(R.string.dialog_message))

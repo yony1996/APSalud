@@ -3,13 +3,13 @@ package com.APSalud.apsalud.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.APSalud.apsalud.util.PreferenceHelper
 import com.APSalud.apsalud.util.PreferenceHelper.set
 import com.APSalud.apsalud.util.PreferenceHelper.get
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.util.toast
+import kotlinx.android.synthetic.main.activity_menu.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,17 +26,17 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        findViewById<View>(R.id.MakeAppoinment).setOnClickListener {
+        MakeAppoinment.setOnClickListener {
             val intent=Intent(this@MenuActivity, CreateAppointmentActivity::class.java)
             startActivity(intent)
         }
 
-        findViewById<View>(R.id.MyAppoinment).setOnClickListener {
+        MyAppoinment.setOnClickListener {
             val intent=Intent(this@MenuActivity, AppointmentsActivity::class.java)
             startActivity(intent)
         }
 
-        findViewById<View>(R.id.Logout).setOnClickListener {
+        Logout.setOnClickListener {
             performLogout()
 
 

@@ -3,9 +3,9 @@ package com.APSalud.apsalud.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.model.Appointment
+import kotlinx.android.synthetic.main.activity_appointments.*
 
 class AppointmentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class AppointmentsActivity : AppCompatActivity() {
             Appointment(4,"Medico 4","2021/06/13","2:00 PM")
 
         )
-        findViewById<RecyclerView>(R.id.rvAppointment).layoutManager=LinearLayoutManager(this)
-        findViewById<RecyclerView>(R.id.rvAppointment).adapter= AppointmentAdapter(appointments)
+        rvAppointment.layoutManager=LinearLayoutManager(this)
+        rvAppointment.adapter= AppointmentAdapter(appointments)
     }
 }
