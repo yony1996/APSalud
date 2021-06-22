@@ -16,6 +16,7 @@ import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
+import com.APSalud.apsalud.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_create_appointment.*
 import kotlinx.android.synthetic.main.card_view_step_one.*
@@ -93,7 +94,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
     private fun listenDoctorAndChanges(){
         doctorSpiner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val doctor= adapter?.getItemAtPosition(position) as Doctor
+                val doctor =adapter?.getItemAtPosition(position) as Doctor
                 loadHours(doctor.id,EtxtScheduledDate.text.toString())
 
             }
@@ -109,7 +110,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-               val doctor:Doctor=doctorSpiner.selectedItem as Doctor
+               val doctor=doctorSpiner.selectedItem as Doctor
                 loadHours(doctor.id,EtxtScheduledDate.text.toString())
             }
 
@@ -121,36 +122,37 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     }
     private fun loadHours(doctorId:Int,date:String){
-        if( date.isEmpty()){
+        //Toast.makeText(this,"doctor:$doctorId ,date:$date",Toast.LENGTH_LONG).show()
+         if( date.isEmpty()){
             return
         }
         val call=apiService.getHours(doctorId,date)
         call.enqueue(object :Callback<Schedule>{
-            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-            override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
-                if(response.isSuccessful){
-                    val schedule=response.body()
-                    // val hours= arrayOf("3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM")
-                    schedule?.let {
-                        AlertInfo.visibility=View.GONE
-                        val intervals=it.morning+it.afternoon
-                        val hours=ArrayList<String>()
-                        intervals.forEach { interval->
-                            hours.add(interval.start)
-                        }
+             @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+             override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
+                 if(response.isSuccessful){
+                     val schedule=response.body()
 
-                        displayIntervalRadio(hours)
-                    }
+                     schedule?.let {
+                         AlertInfo.visibility=View.GONE
+                         val intervals=it.morning + it.afternoon
+                         val hours=ArrayList<String>()
+                         intervals.forEach { interval->
+                             hours.add(interval.start)
+                         }
+
+                         displayIntervalRadio(hours)
+                     }
 
 
-                    //Toast.makeText(this@CreateAppointmentActivity,"morning:${schedule?.morning?.size} ,afternoon: ${schedule?.afternoon?.size}",Toast.LENGTH_LONG).show()
-                }
-            }
+                 }
+             }
 
-            override fun onFailure(call: Call<Schedule>, t: Throwable) {
-                Toast.makeText(this@CreateAppointmentActivity,getString(R.string.Fail_hours),Toast.LENGTH_LONG).show()
-            }
-        })
+             override fun onFailure(call: Call<Schedule>, t: Throwable) {
+                 toast(getString(R.string.Fail_hours))
+             }
+         })
+
     }
     private fun loadSpecialties(){
         val call=apiService.getSpecialties()
@@ -190,14 +192,17 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
     }
     private fun loadDoctors(specialtyId:Int){
+
         val call=apiService.getDoctors(specialtyId)
         call.enqueue(object: Callback<ArrayList<Doctor>>{
             override fun onResponse(call: Call<ArrayList<Doctor>>,response: Response<ArrayList<Doctor>>) {
                 if (response.isSuccessful){ //200...300
-                    response.body()?.let {
+
+                   response.body()?.let {
                         val doctors=it.toMutableList()
                         doctorSpiner.adapter=ArrayAdapter<Doctor>(this@CreateAppointmentActivity,android.R.layout.simple_list_item_1,doctors)
                     }
+
 
 
 

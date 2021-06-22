@@ -12,5 +12,5 @@ data class UserInformation(
     val middle_name:String,
     val last_name:String,
     val second_last_name:String,
-    val phone:String
+    val phone:Int
 )

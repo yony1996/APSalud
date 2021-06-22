@@ -63,6 +63,6 @@ class MenuActivity : AppCompatActivity() {
     }
     private fun clearSessionPreference(){
 
-        preferences["password"]=""
+        preferences["passport"]=""
     }
 }

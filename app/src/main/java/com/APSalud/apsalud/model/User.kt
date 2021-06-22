@@ -13,6 +13,6 @@ data class User(
     val id:Int,
     val name:String,
     val email:String,
-    val status:Int,
+    val status:Boolean,
     val rol:String
 )

@@ -1,6 +1,7 @@
 package com.APSalud.apsalud.io
 
 import com.APSalud.apsalud.io.response.LoginResponse
+import com.APSalud.apsalud.model.Appointment
 import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
@@ -26,6 +27,9 @@ interface ApiService {
 
     @POST("logout")
     fun postLogout(@Header("Authorization") authHeader: String):Call<Void>
+
+    @GET("appointments")
+    fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
 
     companion object Factory{
         private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"

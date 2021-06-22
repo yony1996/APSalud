@@ -60,4 +60,8 @@
     <string name="Alert_empty_text_login">Ingrese un correo y contraseña</string>
     <string name="welcome_name">Bienvenido %1$s</string>
 
+    <string name="item_appointment_createdAt">Esta cita se registro el día %1$s con la siguiente descripción:</string>
+
+
+
 </resources>
