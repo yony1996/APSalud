@@ -42,6 +42,11 @@ class MenuActivity : AppCompatActivity() {
 
         }
 
+        MyExams.setOnClickListener {
+            val intent=Intent(this@MenuActivity, ExamsActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     private fun performLogout(){
         val passport=preferences["passport",""]

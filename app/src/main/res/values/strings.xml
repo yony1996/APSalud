@@ -61,7 +61,11 @@
     <string name="welcome_name">Bienvenido %1$s</string>
 
     <string name="item_appointment_createdAt">Esta cita se registro el día %1$s con la siguiente descripción:</string>
+    <string name="Alert_error_stroreAppointment">Ocurrio un error inesperado al registra la cita medica</string>
+    <string name="My_exams">Mis Examenes</string>
 
+    <string name="item_exam_id">Examen # %1$d</string>
+    <string name="item_exam_created">Este examen fue registrado el dia %1$d por el doctor %1$s</string>
 
 
 </resources>

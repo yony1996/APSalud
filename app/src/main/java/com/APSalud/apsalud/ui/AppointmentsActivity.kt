@@ -31,7 +31,7 @@ class AppointmentsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_appointments)
 
         loadAppointments()
-
+        //aqui swipe refresh
         rvAppointment.layoutManager=LinearLayoutManager(this)
         rvAppointment.adapter= appointmentAdapter
     }

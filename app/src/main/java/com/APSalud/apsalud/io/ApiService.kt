@@ -1,11 +1,10 @@
 package com.APSalud.apsalud.io
 
 import com.APSalud.apsalud.io.response.LoginResponse
-import com.APSalud.apsalud.model.Appointment
-import com.APSalud.apsalud.model.Doctor
-import com.APSalud.apsalud.model.Schedule
-import com.APSalud.apsalud.model.Specialty
+import com.APSalud.apsalud.io.response.SimpleResponse
+import com.APSalud.apsalud.model.*
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -30,6 +29,24 @@ interface ApiService {
 
     @GET("appointments")
     fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
+
+    @POST("appointments")
+    @Headers("Accept:application/json")
+    fun storeAppointment(@Header("Authorization") authHeader: String,
+                         @Query("description") description:String,
+                         @Query("specialty_id") specialtyId:Int,
+                         @Query("doctor_id") doctorId:Int,
+                         @Query( "scheduled_date")scheduledDate:String,
+                         @Query("scheduled_time") scheduledTime:String,
+                         @Query("type") type:String
+
+                         ):Call<SimpleResponse>
+
+    @GET("exams")
+    fun getExams(@Header("Authorization") authHeader: String):Call<ArrayList<Exam>>
+
+    @GET("exams/{download}/download")
+    fun getPdf(@Path("download") download:Int):Call<ResponseBody>
 
     companion object Factory{
         private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"

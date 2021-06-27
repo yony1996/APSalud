@@ -13,9 +13,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
+import com.APSalud.apsalud.io.response.SimpleResponse
 import com.APSalud.apsalud.model.Doctor
 import com.APSalud.apsalud.model.Schedule
 import com.APSalud.apsalud.model.Specialty
+import com.APSalud.apsalud.util.PreferenceHelper
+import com.APSalud.apsalud.util.PreferenceHelper.get
 import com.APSalud.apsalud.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_create_appointment.*
@@ -32,6 +35,9 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     private val apiService: ApiService by lazy{
         ApiService.create()
+    }
+    private val preferences by lazy {
+        PreferenceHelper.defaultPrefs(this)
     }
     private val selectedCalendar=Calendar.getInstance()
     private var selectedTimeRadioButton:RadioButton?=null
@@ -79,16 +85,50 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
 
         ConfirmAppoimeintment.setOnClickListener {
-            Toast.makeText(this,getString(R.string.toast_message),Toast.LENGTH_SHORT).show()
-            finish()
+            performStoreAppointment()
         }
 
         loadSpecialties()
         listenSpecialtyChanges()
         listenDoctorAndChanges()
 
+    }
+    private fun performStoreAppointment(){
+        ConfirmAppoimeintment.isClickable=false
+        val passport=preferences["passport",""]
+        val authHeader="Bearer $passport"
+        val description=tvConfirm_description.text.toString()
+        val specialty=specialtySpiner.selectedItem as Specialty
+        val  doctor =doctorSpiner.selectedItem as Doctor
+        val scheduledDate=tvConfirm_scheduled_date.text.toString()
+        val scheduledTime=tvConfirm_scheduled_time.text.toString()
+        val type=tvConfirm_type.text.toString()
 
+        val call =apiService.storeAppointment(
+            authHeader,description,
+            specialty.id,doctor.id,
+            scheduledDate,scheduledTime,
+            type
+        )
+        call.enqueue(object : Callback<SimpleResponse>{
+            override fun onResponse(
+                call: Call<SimpleResponse>,
+                response: Response<SimpleResponse>
+            ) {
+                if (response.isSuccessful){
+                    toast(getString(R.string.toast_message))
+                    finish()
+                }else{
+                    toast(getString(R.string.Alert_error_stroreAppointment))
+                    ConfirmAppoimeintment.isClickable=true
+                }
+            }
 
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                toast(t.localizedMessage)
+                ConfirmAppoimeintment.isClickable=true
+            }
+        })
 
     }
     private fun listenDoctorAndChanges(){
@@ -125,7 +165,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
         //Toast.makeText(this,"doctor:$doctorId ,date:$date",Toast.LENGTH_LONG).show()
          if( date.isEmpty()){
             return
-        }
+         }
         val call=apiService.getHours(doctorId,date)
         call.enqueue(object :Callback<Schedule>{
              @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -215,7 +255,6 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
         } )
     }
-
     private fun showAppointmentDataConfirm(){
         tvConfirm_description.text= EtxtDescription.text.toString()
         tvConfirm_type.text=specialtySpiner.selectedItem.toString()
@@ -232,8 +271,6 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
 
     }
-
-
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     fun onClickScheduleDate(v:View?){
 
@@ -272,7 +309,6 @@ class CreateAppointmentActivity : AppCompatActivity() {
         //show dialog
         datePickerDialog.show()
     }
-
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun  displayIntervalRadio( hours:ArrayList<String>){
 
@@ -312,9 +348,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
 
     }
-
     private fun Int.twoDigits()=if(this>=10) this.toString() else "0$this"
-
     override fun onBackPressed() {
         when {
             step3.visibility==View.VISIBLE -> {
