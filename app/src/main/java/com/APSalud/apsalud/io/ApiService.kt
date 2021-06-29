@@ -27,6 +27,14 @@ interface ApiService {
     @POST("logout")
     fun postLogout(@Header("Authorization") authHeader: String):Call<Void>
 
+    @POST("register")
+    @Headers("Accept:application/json")
+    fun postRegister(
+        @Query("email") email:String,
+        @Query("name") name:String,
+        @Query("password") password:String,
+    ):Call<LoginResponse>
+
     @GET("appointments")
     fun getAppointments(@Header("Authorization") authHeader: String):Call<ArrayList<Appointment>>
 

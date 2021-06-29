@@ -26,6 +26,11 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        setOnClickListeners()
+
+    }
+
+    private fun setOnClickListeners(){
         MakeAppoinment.setOnClickListener {
             val intent=Intent(this@MenuActivity, CreateAppointmentActivity::class.java)
             startActivity(intent)
@@ -46,7 +51,6 @@ class MenuActivity : AppCompatActivity() {
             val intent=Intent(this@MenuActivity, ExamsActivity::class.java)
             startActivity(intent)
         }
-
     }
     private fun performLogout(){
         val passport=preferences["passport",""]
