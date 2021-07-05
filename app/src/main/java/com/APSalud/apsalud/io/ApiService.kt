@@ -53,8 +53,7 @@ interface ApiService {
     @GET("exams")
     fun getExams(@Header("Authorization") authHeader: String):Call<ArrayList<Exam>>
 
-    @GET("exams/{download}/download")
-    fun getPdf(@Path("download") download:Int):Call<ResponseBody>
+
 
     companion object Factory{
         private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"

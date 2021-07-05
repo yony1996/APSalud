@@ -13,7 +13,7 @@
     <string name="hint_name">Ingrese su nombre</string>
     <string name="hint_contraseña">Ingrese su contraseña</string>
     <string name="fill_your_data">Por favor llena tus datos</string>
-    <string name="saludo">Bienvenido</string>
+    <string name="saludo">Bienvenido a</string>
     <string name="Make_Appoinment">Reservar una cita</string>
     <string name="scheduled">Mis citas medicas</string>
     <string name="Exams">Mis examenes</string>
@@ -65,9 +65,10 @@
     <string name="My_exams">Mis Examenes</string>
 
     <string name="item_exam_id">Examen # %1$d</string>
-    <string name="item_exam_created">Este examen fue registrado el dia %1$d por el doctor %1$s</string>
+    <string name="item_exam_created">Este examen fue registrado el dia %1$s </string>
     <string name="Alert_register">Porfavor llenar todos los campos</string>
     <string name="Alert_error_register">Ocurrio un error en el registro</string>
+    <string name="item_exam_doctor">"Por el doctor %1$s "</string>
 
 
 </resources>

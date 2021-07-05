@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        /*
         val preferences= PreferenceHelper.defaultPrefs(this)
         if (preferences["passport",""].contains(".")) {
             goToMenuActivity()
-        }
+        }*/
         BtnIngresar.setOnClickListener {
             performLogin()
         }
@@ -86,7 +86,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    private fun goToMenuActivity() {
+
+   private fun goToMenuActivity() {
         val intent = Intent(this@MainActivity, MenuActivity::class.java)
         startActivity(intent)
         finish()
