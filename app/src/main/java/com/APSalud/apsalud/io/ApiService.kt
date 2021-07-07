@@ -30,8 +30,8 @@ interface ApiService {
     @POST("register")
     @Headers("Accept:application/json")
     fun postRegister(
-        @Query("email") email:String,
         @Query("name") name:String,
+        @Query("email") email:String,
         @Query("password") password:String,
     ):Call<LoginResponse>
 

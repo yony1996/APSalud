@@ -25,7 +25,7 @@ class SplashScreen : AppCompatActivity() {
         if (preferences["passport",""].contains(".")) {
             goToMenuActivity()
         }else{
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this@SplashScreen, MainActivity::class.java)
             startActivity(intent)
             finish()
         }

@@ -3,6 +3,7 @@ package com.APSalud.apsalud.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.APSalud.apsalud.util.PreferenceHelper.set
 import com.APSalud.apsalud.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,7 +67,8 @@ class RegisterActivity : AppCompatActivity() {
                     }
                     if (loginResponse.success){
                         createSessionPreference(loginResponse.passport)
-                        Snackbar.make(mainLayout,getString(R.string.welcome_name,loginResponse.user.name),Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.green)).show()
+                        Snackbar.make(findViewById<LinearLayout>(R.id.registerLayout),getString(R.string.welcome_name),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.green)).show()
+                        //Snackbar.make(registerLayout,getString(R.string.welcome_name,loginResponse.user.name),Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.green)).show()
                         goToMenuActivity()
                     }else{
                         toast(getString(R.string.error_credentials))
@@ -84,14 +87,14 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun goToMenuActivity() {
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this@RegisterActivity, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     private fun createSessionPreference(passport:String) {
 
-        val preferences= PreferenceHelper.defaultPrefs(this)
+        val preferences= PreferenceHelper.defaultPrefs(this@RegisterActivity)
         preferences["passport"]=passport
 
     }
