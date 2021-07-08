@@ -24,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="82dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/logo_ap" />
+        android:src="@drawable/logo_ap"
+        tools:ignore="ContentDescription" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="350dp"
@@ -37,6 +38,7 @@
         >
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -46,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/label_email"
                 android:textColor="@color/black" />
 
@@ -55,29 +57,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:autofillHints="no"
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress" />
 
 
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="@string/label_contraseña"
-                android:textColor="@color/black" />
+                android:layout_marginTop="20dp"
+                app:boxStrokeColor="@color/teal_200"
+                app:endIconTint="@color/pink"
+                app:hintTextColor="@color/black"
+                app:passwordToggleContentDescription="password"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black">
 
-            <EditText
-                android:id="@+id/EtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:autofillHints="no"
-                android:hint="@string/hint_contraseña"
-                android:inputType="textPassword" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/EtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:hint="@string/hint_contraseña"
+                    android:inputType="textPassword"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
                 android:id="@+id/BtnIngresar"
@@ -85,9 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/morado"
-
                 android:text="@string/label_button_in"
-
                 android:textColor="@color/white" />
 
             <TextView

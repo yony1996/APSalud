@@ -99,7 +99,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
         val authHeader="Bearer $passport"
         val description=tvConfirm_description.text.toString()
         val specialty=specialtySpiner.selectedItem as Specialty
-        val  doctor =doctorSpiner.selectedItem as Doctor
+        val doctor =doctorSpiner.selectedItem as Doctor
         val scheduledDate=tvConfirm_scheduled_date.text.toString()
         val scheduledTime=tvConfirm_scheduled_time.text.toString()
         val type=tvConfirm_type.text.toString()
@@ -256,17 +256,17 @@ class CreateAppointmentActivity : AppCompatActivity() {
         } )
     }
     private fun showAppointmentDataConfirm(){
-        tvConfirm_description.text= EtxtDescription.text.toString()
-        tvConfirm_type.text=specialtySpiner.selectedItem.toString()
+
+
 
         val radiogroup =radioType.checkedRadioButtonId
         val selectedType=radioType.findViewById<RadioButton>(radiogroup)
 
-        tvConfirm_specialty.text=selectedType.text.toString()
+        tvConfirm_description.text= EtxtDescription.text.toString()
+        tvConfirm_type.text=selectedType.text.toString()
+        tvConfirm_specialty.text=specialtySpiner.selectedItem.toString()
         tvConfirm_doctor.text=doctorSpiner.selectedItem.toString()
         tvConfirm_scheduled_date.text=EtxtScheduledDate.text.toString()
-
-
         tvConfirm_scheduled_time.text=selectedTimeRadioButton?.text.toString()
 
 

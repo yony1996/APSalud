@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
     @RequiresApi(Build.VERSION_CODES.M)

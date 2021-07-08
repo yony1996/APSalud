@@ -2,6 +2,7 @@ package com.APSalud.apsalud.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
@@ -45,6 +46,9 @@ class AppointmentsActivity : AppCompatActivity() {
                 call: Call<ArrayList<Appointment>>,
                 response: Response<ArrayList<Appointment>>
             ) {
+                if(response.body()?.isEmpty() == true){
+                    alertAppoinment()
+                }
                if (response.isSuccessful){
                    response.body()?.let {
                        appointmentAdapter.appointments=it
@@ -58,5 +62,18 @@ class AppointmentsActivity : AppCompatActivity() {
                 toast(t.localizedMessage)
             }
         })
+    }
+
+    private fun alertAppoinment(){
+        val builder=  AlertDialog.Builder(this)
+        builder.setTitle("Alerta")
+        builder.setMessage("Aun no hay citas reservadas")
+        builder.setIcon(android.R.drawable.ic_dialog_info)
+        builder.setPositiveButton("OK"){ _, _->
+            finish()
+        }
+
+        val dialog=builder.create()
+        dialog.show()
     }
 }
