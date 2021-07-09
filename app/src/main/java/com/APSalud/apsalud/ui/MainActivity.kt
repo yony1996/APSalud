@@ -15,6 +15,9 @@ import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.io.response.LoginResponse
 import com.APSalud.apsalud.util.toast
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +65,8 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(mainLayout,getString(R.string.Alert_empty_text_login),Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.orange)).show()
             return
         }
-       val call= apiService.postLogin(email,password)
+        val call= apiService.postLogin(email,password)
+
         call.enqueue(object : Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful){
@@ -84,17 +88,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-              toast(t.localizedMessage)
+                toast(t.localizedMessage)
             }
         })
+
+
     }
 
-   private fun goToMenuActivity() {
+    private fun goToMenuActivity() {
         val intent = Intent(this@MainActivity, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }
-
     private fun createSessionPreference(passport:String) {
 
         val preferences= PreferenceHelper.defaultPrefs(this)

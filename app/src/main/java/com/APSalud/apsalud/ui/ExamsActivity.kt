@@ -13,6 +13,9 @@ import com.APSalud.apsalud.util.PreferenceHelper.get
 import com.APSalud.apsalud.util.toast
 import kotlinx.android.synthetic.main.activity_appointments.*
 import kotlinx.android.synthetic.main.activity_exams.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +44,6 @@ class ExamsActivity : AppCompatActivity() {
     private fun loadExams(){
         val passport=preferences["passport",""]
         val call=apiService.getExams("Bearer $passport")
-
         call.enqueue(object : Callback<ArrayList<Exam>> {
             override fun onResponse(
                 call: Call<ArrayList<Exam>>,
@@ -64,6 +66,8 @@ class ExamsActivity : AppCompatActivity() {
                 toast(t.localizedMessage)
             }
         })
+
+
     }
 
     private fun alertExam(){

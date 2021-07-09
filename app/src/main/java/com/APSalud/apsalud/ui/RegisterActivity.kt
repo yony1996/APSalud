@@ -17,6 +17,9 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,7 +59,6 @@ class RegisterActivity : AppCompatActivity() {
                 Snackbar.LENGTH_LONG).setBackgroundTint(getColor(R.color.red)).show()
             return
         }
-
         val call=apiService.postRegister(name,email,password)
         call.enqueue(object: Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
@@ -80,10 +82,12 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-               toast(t.localizedMessage)
+                toast(t.localizedMessage)
             }
 
         })
+
+
 
     }
 

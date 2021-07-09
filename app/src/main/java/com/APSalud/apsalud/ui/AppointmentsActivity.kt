@@ -11,6 +11,9 @@ import com.APSalud.apsalud.util.PreferenceHelper
 import com.APSalud.apsalud.util.PreferenceHelper.get
 import com.APSalud.apsalud.util.toast
 import kotlinx.android.synthetic.main.activity_appointments.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +43,6 @@ class AppointmentsActivity : AppCompatActivity() {
     private fun loadAppointments(){
         val passport=preferences["passport",""]
         val call=apiService.getAppointments("Bearer $passport")
-
         call.enqueue(object : Callback<ArrayList<Appointment>>{
             override fun onResponse(
                 call: Call<ArrayList<Appointment>>,
@@ -49,19 +51,21 @@ class AppointmentsActivity : AppCompatActivity() {
                 if(response.body()?.isEmpty() == true){
                     alertAppoinment()
                 }
-               if (response.isSuccessful){
-                   response.body()?.let {
-                       appointmentAdapter.appointments=it
-                       appointmentAdapter.notifyDataSetChanged()
-                   }
+                if (response.isSuccessful){
+                    response.body()?.let {
+                        appointmentAdapter.appointments=it
+                        appointmentAdapter.notifyDataSetChanged()
+                    }
 
-               }
+                }
             }
 
             override fun onFailure(call: Call<ArrayList<Appointment>>, t: Throwable) {
                 toast(t.localizedMessage)
             }
         })
+
+
     }
 
     private fun alertAppoinment(){

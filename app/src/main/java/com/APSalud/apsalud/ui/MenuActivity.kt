@@ -10,6 +10,9 @@ import com.APSalud.apsalud.R
 import com.APSalud.apsalud.io.ApiService
 import com.APSalud.apsalud.util.toast
 import kotlinx.android.synthetic.main.activity_menu.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,6 +72,8 @@ class MenuActivity : AppCompatActivity() {
                 toast(t.localizedMessage)
             }
         })
+
+
     }
     private fun clearSessionPreference(){
 
