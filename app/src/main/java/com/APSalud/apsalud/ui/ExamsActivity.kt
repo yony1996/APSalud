@@ -49,8 +49,8 @@ class ExamsActivity : AppCompatActivity() {
                 call: Call<ArrayList<Exam>>,
                 response: Response<ArrayList<Exam>>
             ) {
-                if(response.body()==null){
-                    alertExam()
+                if(response.body()?.isEmpty() == true){
+                    alertExam() 
                 }
                 if (response.isSuccessful){
 
