@@ -56,7 +56,7 @@ interface ApiService {
 
 
     companion object Factory{
-        private  const val BASE_URL="http://vast-lowlands-02402.herokuapp.com/api/"
+        private  const val BASE_URL="https://apsalud.life/api/"
 
         fun create():ApiService{
             val interceptor=HttpLoggingInterceptor()
